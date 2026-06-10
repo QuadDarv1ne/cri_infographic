@@ -107,7 +107,7 @@ export default function Home() {
       <ScrollToTop />
 
       {/* Hero / Header Section */}
-      <header id="cri" className="relative overflow-hidden pt-14">
+      <header id="hero" className="relative overflow-hidden pt-14">
         {/* Background decorative elements */}
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-72 h-72 bg-[#e8751a]/8 rounded-full blur-3xl" />
