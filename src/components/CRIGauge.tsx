@@ -1,13 +1,41 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import { motion, animate } from 'framer-motion'
+import { useState, useCallback, useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 interface CRIGaugeProps {
   value?: number
   onValueChange?: (value: number) => void
   temperature?: number
   onTemperatureChange?: (temp: number) => void
+}
+
+function AnimatedValue({ x, y, value, displayValue }: { x: number; y: number; value: number; displayValue: number }) {
+  const prevValue = useRef(value)
+  const [animKey, setAnimKey] = useState(0)
+
+  useEffect(() => {
+    if (value !== prevValue.current) {
+      prevValue.current = value
+      setAnimKey(k => k + 1)
+    }
+  }, [value])
+
+  return (
+    <motion.text
+      x={x} y={y}
+      textAnchor="middle"
+      className="fill-white"
+      fontSize={42}
+      fontWeight={700}
+      key={animKey}
+      initial={{ opacity: 0.5, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.15 }}
+    >
+      {displayValue}
+    </motion.text>
+  )
 }
 
 const ranges = [
@@ -81,7 +109,6 @@ export default function CRIGauge({ value = 85, onValueChange, temperature = 4000
   }
 
   const needleAngle = 180 + (displayValue / 100) * 180
-  const needleTip = polarToCartesian(needleAngle, gaugeRadius - 40)
 
   // Color temperature to color for the slider track
   const getTempColor = (temp: number) => {
@@ -158,10 +185,10 @@ export default function CRIGauge({ value = 85, onValueChange, temperature = 4000
         {/* Needle - using motion.g for reliable animation */}
         <motion.g
           animate={{
-            rotate: needleAngle - 180,
+            rotate: (displayValue / 100) * 180 - 90,
           }}
           transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-          style={{ originX: `${centerX}px`, originY: `${centerY}px` }}
+          style={{ transformOrigin: `${centerX}px ${centerY}px` }}
         >
           <line
             x1={centerX} y1={centerY}
@@ -175,19 +202,7 @@ export default function CRIGauge({ value = 85, onValueChange, temperature = 4000
         <circle cx={centerX} cy={centerY} r={4} fill="#ffffff" />
 
         {/* Center value */}
-        <motion.text
-          x={centerX} y={centerY + 44}
-          textAnchor="middle"
-          className="fill-white"
-          fontSize={42}
-          fontWeight={700}
-          key={displayValue}
-          initial={{ opacity: 0.5, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.15 }}
-        >
-          {displayValue}
-        </motion.text>
+        <AnimatedValue x={centerX} y={centerY + 44} value={value} displayValue={displayValue} />
         <text
           x={centerX} y={centerY + 66}
           textAnchor="middle"

@@ -99,19 +99,17 @@ export default function ColorTemperatureDial() {
     return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`
   }
 
-  const describeSector = (startAngle: number, endAngle: number, scale: number = 1) => {
-    const sOuterR = outerR * scale
-    const sInnerR = innerR / scale
-    const outerStart = polarToCartesian(startAngle, sOuterR)
-    const outerEnd = polarToCartesian(endAngle, sOuterR)
-    const innerStart = polarToCartesian(endAngle, sInnerR)
-    const innerEnd = polarToCartesian(startAngle, sInnerR)
+  const describeSector = (startAngle: number, endAngle: number) => {
+    const outerStart = polarToCartesian(startAngle, outerR)
+    const outerEnd = polarToCartesian(endAngle, outerR)
+    const innerStart = polarToCartesian(endAngle, innerR)
+    const innerEnd = polarToCartesian(startAngle, innerR)
     const largeArc = endAngle - startAngle > 180 ? 1 : 0
     return [
       `M ${outerStart.x} ${outerStart.y}`,
-      `A ${sOuterR} ${sOuterR} 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
+      `A ${outerR} ${outerR} 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
       `L ${innerStart.x} ${innerStart.y}`,
-      `A ${sInnerR} ${sInnerR} 0 ${largeArc} 0 ${innerEnd.x} ${innerEnd.y}`,
+      `A ${innerR} ${innerR} 0 ${largeArc} 0 ${innerEnd.x} ${innerEnd.y}`,
       'Z',
     ].join(' ')
   }
@@ -144,7 +142,6 @@ export default function ColorTemperatureDial() {
           {zones.map((zone, i) => {
             const { start, end } = segmentAngles[i]
             const isActive = activeZone === i
-            const scale = isActive ? 1.03 : 1
             return (
               <g
                 key={i}
@@ -161,24 +158,21 @@ export default function ColorTemperatureDial() {
                 {/* Glow effect */}
                 {isActive && (
                   <path
-                    d={describeSector(start - 3, end + 3, 1.06)}
+                    d={describeSector(start - 3, end + 3)}
                     fill={zone.glowColor}
-                    style={{ transition: 'all 0.3s ease' }}
+                    style={{ transition: 'opacity 0.3s ease' }}
                   />
                 )}
                 {/* Main sector */}
                 <motion.path
-                  d={describeSector(start + 2, end - 2, scale)}
+                  d={describeSector(start + 2, end - 2)}
                   fill={zone.color}
-                  opacity={isActive ? 1 : 0.7}
                   animate={{
                     scale: isActive ? 1.02 : 1,
+                    opacity: isActive ? 1 : 0.7,
                   }}
                   transition={{ duration: 0.3, ease: 'easeOut' }}
-                  style={{
-                    transformOrigin: `${cx}px ${cy}px`,
-                    transition: 'opacity 0.3s ease',
-                  }}
+                  style={{ transformOrigin: `${cx}px ${cy}px` }}
                 />
                 {/* Label inside segment */}
                 {(() => {
@@ -194,7 +188,7 @@ export default function ColorTemperatureDial() {
                       className="fill-gray-900"
                       fontSize={isActive ? 11 : 9.5}
                       fontWeight={isActive ? 700 : 500}
-                      style={{ transition: 'all 0.3s ease', pointerEvents: 'none' }}
+                      style={{ transition: 'font-size 0.3s ease', pointerEvents: 'none' }}
                     >
                       {zone.label}
                     </text>
@@ -215,7 +209,7 @@ export default function ColorTemperatureDial() {
                       className="fill-gray-800/70"
                       fontSize={isActive ? 9 : 8}
                       fontWeight={400}
-                      style={{ transition: 'all 0.3s ease', pointerEvents: 'none' }}
+                      style={{ transition: 'font-size 0.3s ease', pointerEvents: 'none' }}
                     >
                       {tempText}
                     </text>
@@ -234,27 +228,31 @@ export default function ColorTemperatureDial() {
             textAnchor="middle"
             fontSize={22}
             fontWeight={700}
-            animate={{
-              fill: centerGlowColor,
-              filter: activeZone !== null ? `drop-shadow(0 0 8px ${centerGlowColor}60)` : 'none',
-            }}
+            fill={centerGlowColor}
+            animate={{ opacity: activeZone !== null ? 0.15 : 0 }}
             transition={{ duration: 0.3 }}
+            style={{ filter: `drop-shadow(0 0 10px ${centerGlowColor})` }}
           >
             Цветовая
           </motion.text>
+          <text x={cx} y={cy - 15} textAnchor="middle" className="fill-white" fontSize={22} fontWeight={700}>
+            Цветовая
+          </text>
           <motion.text
             x={cx} y={cy + 10}
             textAnchor="middle"
             fontSize={22}
             fontWeight={700}
-            animate={{
-              fill: centerGlowColor,
-              filter: activeZone !== null ? `drop-shadow(0 0 8px ${centerGlowColor}60)` : 'none',
-            }}
+            fill={centerGlowColor}
+            animate={{ opacity: activeZone !== null ? 0.15 : 0 }}
             transition={{ duration: 0.3 }}
+            style={{ filter: `drop-shadow(0 0 10px ${centerGlowColor})` }}
           >
             температура
           </motion.text>
+          <text x={cx} y={cy + 10} textAnchor="middle" className="fill-white" fontSize={22} fontWeight={700}>
+            температура
+          </text>
           <text x={cx} y={cy + 35} textAnchor="middle" className="fill-gray-400" fontSize={14}>
             Кельвин (К)
           </text>
