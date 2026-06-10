@@ -40,6 +40,27 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "CRI и Цветовая температура — Интерактивная инфографика",
+  "description": "Интерактивная инфографика об индексе цветопередачи (CRI) и цветовой температуре света. Визуализации, сравнения источников света и квиз для проверки знаний.",
+  "author": {
+    "@type": "Person",
+    "name": "Дуплей Максим Игоревич",
+  },
+  "copyrightYear": 2026,
+  "inLanguage": "ru",
+  "learningResourceType": "Interactive Resource",
+  "educationalUse": "Self-assessment",
+  "about": [
+    "Индекс цветопередачи (CRI)",
+    "Цветовая температура света",
+    "ГОСТ 54350-2015",
+  ],
+  "teaches": "Понимание влияния CRI и цветовой температуры на восприятие цветов",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -47,6 +68,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
