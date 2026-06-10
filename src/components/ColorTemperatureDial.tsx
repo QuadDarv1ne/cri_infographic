@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface TemperatureZone {
@@ -58,10 +58,25 @@ const zones: TemperatureZone[] = [
 export default function ColorTemperatureDial() {
   const [activeZone, setActiveZone] = useState<number | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const dialRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 200)
     return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (dialRef.current && !dialRef.current.contains(e.target as Node)) {
+        setActiveZone(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
+    }
   }, [])
 
   const cx = 200
@@ -114,7 +129,7 @@ export default function ColorTemperatureDial() {
 
   return (
     <div className="flex flex-col items-center gap-6 w-full">
-      <div className="relative">
+      <div className="relative" ref={dialRef}>
         <motion.svg
           viewBox="0 0 400 400"
           className="w-full max-w-[260px] sm:max-w-sm"
@@ -135,7 +150,13 @@ export default function ColorTemperatureDial() {
                 key={i}
                 onMouseEnter={() => setActiveZone(i)}
                 onMouseLeave={() => setActiveZone(null)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setActiveZone(activeZone === i ? null : i)
+                }}
                 className="cursor-pointer"
+                role="button"
+                aria-label={`Зона: ${zone.label}, ${zone.description}`}
               >
                 {/* Glow effect */}
                 {isActive && (
@@ -306,7 +327,7 @@ export default function ColorTemperatureDial() {
             <p className="text-gray-400 text-sm mt-1">{zones[activeZone].description}</p>
           </>
         ) : (
-          <p className="text-gray-400 text-sm">Наведите на сегмент для подробностей</p>
+          <p className="text-gray-400 text-sm">Нажмите на сегмент для подробностей</p>
         )}
       </div>
     </div>
