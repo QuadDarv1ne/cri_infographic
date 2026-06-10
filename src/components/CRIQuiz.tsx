@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, XCircle, RotateCcw, Trophy, Zap } from 'lucide-react'
 
@@ -73,6 +73,39 @@ export default function CRIQuiz() {
     setIsAnswered(false)
   }, [])
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isFinished) {
+        if (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К') {
+          handleRestart()
+        }
+        return
+      }
+
+      if (!isAnswered) {
+        const num = parseInt(e.key)
+        if (num >= 1 && num <= 4) {
+          handleAnswer(num - 1)
+          return
+        }
+        const lower = e.key.toLowerCase()
+        const letterIndex = ['a', 'b', 'c', 'd', 'ф', 'и', 'с', 'в'].indexOf(lower)
+        if (letterIndex !== -1) {
+          handleAnswer(letterIndex % 4)
+          return
+        }
+      }
+
+      if (isAnswered && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault()
+        handleNext()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isFinished, isAnswered, handleAnswer, handleNext, handleRestart])
+
   const getScoreMessage = () => {
     const pct = score / questions.length
     if (pct === 1) return { text: 'Великолепно! Вы настоящий эксперт по освещению!', icon: Trophy, color: '#e8751a' }
@@ -130,7 +163,7 @@ export default function CRIQuiz() {
   const question = questions[currentQuestion]
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="w-full max-w-lg mx-auto" role="region" aria-label="Квиз по CRI">
       {/* Progress */}
       <div className="flex items-center gap-3 mb-6">
         <div className="flex-1">
@@ -159,6 +192,11 @@ export default function CRIQuiz() {
         >
           <h3 className="text-white font-semibold text-lg mb-5">{question.question}</h3>
 
+          {/* Keyboard hint */}
+          <p className="hidden sm:block text-gray-600 text-[10px] mb-3">
+            Клавиши 1–4 для ответа, Enter — далее
+          </p>
+
           <div className="space-y-2.5">
             {question.options.map((option, index) => {
               const isCorrect = index === question.correct
@@ -184,6 +222,7 @@ export default function CRIQuiz() {
                   key={index}
                   onClick={() => handleAnswer(index)}
                   disabled={isAnswered}
+                  aria-label={`Вариант ${index + 1}: ${option}`}
                   className={`
                     w-full flex items-center gap-3 p-3.5 min-h-[44px] rounded-xl border text-left transition-all duration-200
                     ${bgClass} ${!isAnswered ? 'cursor-pointer active:scale-[0.98]' : 'cursor-default'}
