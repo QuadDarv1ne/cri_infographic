@@ -49,10 +49,14 @@ function ScrollProgress() {
   }, [handleScroll])
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] h-1 bg-transparent">
+    <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-transparent">
       <motion.div
-        className="h-full bg-[#e8751a]"
-        style={{ width: `${progress}%` }}
+        className="h-full"
+        style={{
+          width: `${progress}%`,
+          background: 'linear-gradient(to right, #e8751a, #ffb46b, #e8751a)',
+          boxShadow: progress > 0 ? '0 0 6px rgba(232, 117, 26, 0.5)' : 'none',
+        }}
         transition={{ duration: 0.1, ease: 'linear' }}
       />
     </div>
@@ -99,7 +103,7 @@ export default function Home() {
   const [temperatureValue, setTemperatureValue] = useState(4000)
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] text-white">
+    <div className="min-h-screen bg-[#1a1a2e] text-white bg-gradient-animated">
       {/* Fixed elements */}
       <ScrollProgress />
       <StickyNav />

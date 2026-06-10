@@ -163,3 +163,29 @@ input.cri-slider::-moz-range-thumb {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes bg-shift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-1%, 1%) scale(1.02); }
+  50% { transform: translate(1%, -0.5%) scale(1.01); }
+  75% { transform: translate(-0.5%, -1%) scale(1.02); }
+}
+
+.bg-gradient-animated::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(232, 117, 26, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(255, 180, 107, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 10%, rgba(232, 117, 26, 0.03) 0%, transparent 50%);
+  animation: bg-shift 30s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion) {
+  .bg-gradient-animated::before {
+    animation: none;
+  }
+}

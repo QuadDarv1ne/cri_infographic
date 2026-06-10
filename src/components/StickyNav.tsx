@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Thermometer, Lightbulb, Sun, BookOpen, Eye, GitCompare, HelpCircle, Cpu } from 'lucide-react'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 const sections = [
   { id: 'cri', label: 'CRI', icon: Thermometer },
@@ -15,36 +16,50 @@ const sections = [
   { id: 'quiz', label: 'Квиз', icon: HelpCircle },
 ]
 
+const NAV_HEIGHT = 44
+
 export default function StickyNav() {
   const [activeSection, setActiveSection] = useState('cri')
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollYRef = useRef(0)
+  const isMobile = useIsMobile()
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        if (visible.length > 0) {
+          setActiveSection(visible[0].target.id)
+        }
+      },
+      {
+        rootMargin: `-${NAV_HEIGHT + 8}px 0px -70% 0px`,
+        threshold: 0,
+      }
+    )
+
+    const elements = sections.map((s) => document.getElementById(s.id)).filter(Boolean)
+    elements.forEach((el) => observer.observe(el!))
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el!))
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
 
-      // Show/hide based on scroll direction
       if (currentScrollY < 100) {
         setIsVisible(true)
-      } else if (currentScrollY > lastScrollYRef.current + 5) {
+      } else if (currentScrollY > lastScrollYRef.current + 10) {
         setIsVisible(false)
-      } else if (currentScrollY < lastScrollYRef.current - 5) {
+      } else if (currentScrollY < lastScrollYRef.current - 8) {
         setIsVisible(true)
       }
       lastScrollYRef.current = currentScrollY
-
-      // Determine active section
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i].id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 150) {
-            setActiveSection(sections[i].id)
-            break
-          }
-        }
-      }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -54,7 +69,7 @@ export default function StickyNav() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id)
     if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 80
+      const top = el.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT - 12
       window.scrollTo({ top, behavior: 'smooth' })
     }
   }
@@ -67,11 +82,12 @@ export default function StickyNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -80, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a2e]/80 backdrop-blur-xl border-b border-gray-700/30"
+          className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a2e]/85 backdrop-blur-xl border-b border-gray-700/30"
+          style={{ paddingTop: 'max(env(safe-area-inset-top), 0px)' }}
           aria-label="Навигация по разделам"
         >
-          <div className="max-w-5xl mx-auto px-4 py-2">
-            <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide" role="tablist">
+          <div className="max-w-5xl mx-auto px-2 sm:px-4 py-1.5">
+            <div className="flex items-center justify-center gap-0.5 sm:gap-1 overflow-x-auto scrollbar-hide" role="tablist">
               {sections.map((section) => {
                 const Icon = section.icon
                 const isActive = activeSection === section.id
@@ -83,8 +99,9 @@ export default function StickyNav() {
                     aria-selected={isActive}
                     aria-label={`Перейти к разделу: ${section.label}`}
                     className={`
-                      relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
+                      relative flex items-center gap-1.5 rounded-full text-xs font-medium
                       whitespace-nowrap transition-colors duration-200 flex-shrink-0
+                      ${isMobile ? 'px-2 py-1.5' : 'px-3 py-1.5'}
                       ${isActive
                         ? 'text-white'
                         : 'text-gray-400 hover:text-gray-200'
@@ -98,8 +115,8 @@ export default function StickyNav() {
                         transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                       />
                     )}
-                    <Icon className="h-3.5 w-3.5 relative z-10" />
-                    <span className="relative z-10">{section.label}</span>
+                    <Icon className={`${isMobile ? 'h-4 w-4' : 'h-3.5 w-3.5'} relative z-10 flex-shrink-0`} />
+                    {!isMobile && <span className="relative z-10">{section.label}</span>}
                   </button>
                 )
               })}
