@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#141425"/>
+    </linearGradient>
+    <linearGradient id="spectrum" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b35"/>
+      <stop offset="15%" style="stop-color:#ffb46b"/>
+      <stop offset="30%" style="stop-color:#ffe0a0"/>
+      <stop offset="50%" style="stop-color:#fff5e0"/>
+      <stop offset="70%" style="stop-color:#e0e8ff"/>
+      <stop offset="85%" style="stop-color:#a0b8ff"/>
+      <stop offset="100%" style="stop-color:#6b8bff"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffb46b"/>
+      <stop offset="100%" style="stop-color:#e8751a"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="25%" cy="30%" r="40%">
+      <stop offset="0%" style="stop-color:#e8751a;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#e8751a;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="80%" cy="70%" r="35%">
+      <stop offset="0%" style="stop-color:#6b8bff;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#6b8bff;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow1)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- Decorative dots -->
+  <circle cx="100" cy="100" r="2" fill="#e8751a" opacity="0.3"/>
+  <circle cx="200" cy="80" r="1.5" fill="#e8751a" opacity="0.2"/>
+  <circle cx="350" cy="120" r="2.5" fill="#ffb46b" opacity="0.25"/>
+  <circle cx="900" cy="90" r="2" fill="#6b8bff" opacity="0.2"/>
+  <circle cx="1050" cy="150" r="1.5" fill="#6b8bff" opacity="0.3"/>
+  <circle cx="1100" cy="500" r="2" fill="#e8751a" opacity="0.2"/>
+  <circle cx="150" cy="520" r="2.5" fill="#ffb46b" opacity="0.15"/>
+  <circle cx="800" cy="550" r="1.5" fill="#6b8bff" opacity="0.25"/>
+
+  <!-- Spectrum bar -->
+  <rect x="80" y="390" width="1040" height="6" rx="3" fill="url(#spectrum)" opacity="0.7"/>
+
+  <!-- CRI large text -->
+  <text x="80" y="240" font-family="Arial, Helvetica, sans-serif" font-size="120" font-weight="bold" fill="#ffffff" letter-spacing="-2">CRI</text>
+
+  <!-- Accent dash -->
+  <rect x="310" y="190" width="50" height="8" rx="4" fill="url(#accent)"/>
+
+  <!-- Title -->
+  <text x="385" y="240" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="bold" fill="url(#accent)">Индекс цветопередачи</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="310" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9ca3af">Интерактивная инфографика</text>
+
+  <!-- Description -->
+  <text x="80" y="355" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#6b7280">Визуализации · Сравнения источников · Квиз для проверки знаний</text>
+
+  <!-- Bottom info bar -->
+  <rect x="0" y="560" width="1200" height="70" fill="#141425" opacity="0.8"/>
+  <line x1="0" y1="560" x2="1200" y2="560" stroke="#e8751a" stroke-width="1" opacity="0.2"/>
+
+  <!-- Color temperature indicators -->
+  <circle cx="120" cy="480" r="18" fill="#ff9329" opacity="0.8"/>
+  <text x="120" y="486" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#ffffff" text-anchor="middle">2700K</text>
+
+  <circle cx="240" cy="480" r="18" fill="#ffc06e" opacity="0.8"/>
+  <text x="240" y="486" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle">4000K</text>
+
+  <circle cx="360" cy="480" r="18" fill="#fff4e5" opacity="0.8"/>
+  <text x="360" y="486" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle">5500K</text>
+
+  <circle cx="480" cy="480" r="18" fill="#b8d4ff" opacity="0.8"/>
+  <text x="480" y="486" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#1a1a2e" text-anchor="middle">6500K</text>
+
+  <!-- CRI gauge mini -->
+  <g transform="translate(900, 440)">
+    <rect x="0" y="0" width="220" height="70" rx="12" fill="#1e1e32" stroke="#e8751a" stroke-width="1" opacity="0.5"/>
+    <text x="110" y="28" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#9ca3af" text-anchor="middle">Шкала CRI</text>
+    <rect x="20" y="40" width="180" height="8" rx="4" fill="#2a2a3e"/>
+    <rect x="20" y="40" width="153" height="8" rx="4" fill="url(#accent)"/>
+    <text x="185" y="48" font-family="Arial, Helvetica, sans-serif" font-size="11" fill="#e8751a" font-weight="bold">85</text>
+  </g>
+
+  <!-- Footer text -->
+  <text x="80" y="600" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#6b7280">© Дуплей Максим Игоревич, 2026</text>
+  <text x="1120" y="600" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#6b7280" text-anchor="end">ГОСТ 54350-2015</text>
+</svg>
