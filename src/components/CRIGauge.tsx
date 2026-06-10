@@ -230,6 +230,8 @@ export default function CRIGauge({ value = 85, onValueChange, temperature = 4000
             value={value}
             onChange={(e) => onValueChange?.(Number(e.target.value))}
             className="cri-slider w-full h-2 rounded-full appearance-none cursor-pointer"
+            suppressHydrationWarning
+            aria-label={`Значение CRI: ${value}`}
             style={{
               background: `linear-gradient(to right, #ef4444 0%, #eab308 40%, #f59e0b 60%, #e8751a 80%, #e8751a 100%)`,
             }}
@@ -259,6 +261,8 @@ export default function CRIGauge({ value = 85, onValueChange, temperature = 4000
             value={temperature}
             onChange={(e) => onTemperatureChange?.(Number(e.target.value))}
             className="cri-slider w-full h-2 rounded-full appearance-none cursor-pointer"
+            suppressHydrationWarning
+            aria-label={`Цветовая температура: ${temperature}K`}
             style={{
               background: `linear-gradient(to right, #ffb46b 0%, #ffe8b8 40%, #fff4e0 60%, #c9e8ff 100%)`,
             }}

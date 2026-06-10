@@ -18,12 +18,19 @@ export default function ParticleBackground() {
   const particlesRef = useRef<Particle[]>([])
   const animationRef = useRef<number>(0)
   const dimensionsRef = useRef({ width: 0, height: 0 })
+  const isVisibleRef = useRef(true)
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      canvas.style.display = 'none'
+      return
+    }
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -39,7 +46,14 @@ export default function ParticleBackground() {
     resize()
     window.addEventListener('resize', resize)
 
-    // Initialize particles
+    const handleVisibility = () => {
+      isVisibleRef.current = document.visibilityState === 'visible'
+      if (isVisibleRef.current && !animationRef.current) {
+        animationRef.current = requestAnimationFrame(animate)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+
     const count = Math.min(25, Math.floor(window.innerWidth / 60))
     const { width, height } = dimensionsRef.current
     particlesRef.current = Array.from({ length: count }, () => ({
@@ -49,11 +63,16 @@ export default function ParticleBackground() {
       speedX: (Math.random() - 0.5) * 0.25,
       speedY: (Math.random() - 0.5) * 0.25,
       opacity: Math.random() * 0.25 + 0.08,
-      hue: Math.random() * 40 + 20, // orange range (20-60)
+      hue: Math.random() * 40 + 20,
       hueSpeed: (Math.random() - 0.5) * 0.15,
     }))
 
     const animate = () => {
+      if (!isVisibleRef.current) {
+        animationRef.current = 0
+        return
+      }
+
       const { width: w, height: h } = dimensionsRef.current
       ctx.clearRect(0, 0, w, h)
 
@@ -62,17 +81,14 @@ export default function ParticleBackground() {
         p.y += p.speedY
         p.hue += p.hueSpeed
 
-        // Wrap around edges
         if (p.x < -20) p.x = w + 20
         if (p.x > w + 20) p.x = -20
         if (p.y < -20) p.y = h + 20
         if (p.y > h + 20) p.y = -20
 
-        // Clamp hue between warm orange and cool white
         if (p.hue > 55) p.hueSpeed = -Math.abs(p.hueSpeed)
         if (p.hue < 18) p.hueSpeed = Math.abs(p.hueSpeed)
 
-        // Draw particle as a soft glow
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 6)
         gradient.addColorStop(0, `hsla(${p.hue}, 75%, 65%, ${p.opacity})`)
         gradient.addColorStop(0.5, `hsla(${p.hue}, 55%, 50%, ${p.opacity * 0.3})`)
@@ -91,7 +107,9 @@ export default function ParticleBackground() {
 
     return () => {
       window.removeEventListener('resize', resize)
+      document.removeEventListener('visibilitychange', handleVisibility)
       cancelAnimationFrame(animationRef.current)
+      animationRef.current = 0
     }
   }, [])
 

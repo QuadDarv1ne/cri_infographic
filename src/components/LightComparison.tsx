@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Lightbulb } from 'lucide-react'
+import { adjustColor, getTempLabel, getTempColor } from '@/lib/color-utils'
 
 interface LightSource {
   cri: number
@@ -15,54 +16,6 @@ const sampleColors = [
   { name: 'Тон кожи', hex: '#e8b89d' },
   { name: 'Синий', hex: '#3182ce' },
 ]
-
-// Adjust a hex color based on CRI and temperature
-function adjustColor(hex: string, cri: number, temperature: number): string {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-
-  const criFactor = cri / 100
-
-  let tempShiftR = 0
-  let tempShiftG = 0
-  let tempShiftB = 0
-
-  if (temperature <= 3200) {
-    tempShiftR = 35
-    tempShiftG = 10
-    tempShiftB = -30
-  } else if (temperature <= 5000) {
-    tempShiftR = 5
-    tempShiftG = 5
-    tempShiftB = 0
-  } else {
-    tempShiftR = -15
-    tempShiftG = -5
-    tempShiftB = 30
-  }
-
-  const gray = (r + g + b) / 3
-  const desaturation = 1 - criFactor
-
-  const nr = Math.max(0, Math.min(255, Math.round((r * (1 - desaturation * 0.7) + gray * desaturation * 0.7) + tempShiftR * (0.5 + criFactor * 0.5))))
-  const ng = Math.max(0, Math.min(255, Math.round((g * (1 - desaturation * 0.7) + gray * desaturation * 0.7) + tempShiftG * (0.5 + criFactor * 0.5))))
-  const nb = Math.max(0, Math.min(255, Math.round((b * (1 - desaturation * 0.7) + gray * desaturation * 0.7) + tempShiftB * (0.5 + criFactor * 0.5))))
-
-  return `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb.toString(16).padStart(2, '0')}`
-}
-
-function getTempLabel(temp: number) {
-  if (temp <= 3200) return 'Тёплый'
-  if (temp <= 5000) return 'Нейтральный'
-  return 'Холодный'
-}
-
-function getTempColor(temp: number) {
-  if (temp <= 3200) return '#ffb46b'
-  if (temp <= 5000) return '#fff4e0'
-  return '#c9e8ff'
-}
 
 function LightSourcePanel({
   source,
@@ -98,6 +51,7 @@ function LightSourcePanel({
           value={source.cri}
           onChange={(e) => onChange('cri', Number(e.target.value))}
           className="cri-slider w-full h-1.5 rounded-full appearance-none cursor-pointer"
+          suppressHydrationWarning
           style={{
             background: `linear-gradient(to right, #ef4444 0%, #eab308 40%, #f59e0b 60%, #e8751a 80%, #e8751a 100%)`,
           }}
@@ -120,6 +74,7 @@ function LightSourcePanel({
           value={source.temperature}
           onChange={(e) => onChange('temperature', Number(e.target.value))}
           className="cri-slider w-full h-1.5 rounded-full appearance-none cursor-pointer"
+          suppressHydrationWarning
           style={{
             background: `linear-gradient(to right, #ffb46b 0%, #ffe8b8 40%, #fff4e0 60%, #c9e8ff 100%)`,
           }}

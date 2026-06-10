@@ -68,9 +68,10 @@ export default function StickyNav() {
           exit={{ y: -80, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
           className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a2e]/80 backdrop-blur-xl border-b border-gray-700/30"
+          aria-label="Навигация по разделам"
         >
           <div className="max-w-5xl mx-auto px-4 py-2">
-            <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide" role="tablist">
               {sections.map((section) => {
                 const Icon = section.icon
                 const isActive = activeSection === section.id
@@ -78,6 +79,9 @@ export default function StickyNav() {
                   <button
                     key={section.id}
                     onClick={() => scrollTo(section.id)}
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-label={`Перейти к разделу: ${section.label}`}
                     className={`
                       relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
                       whitespace-nowrap transition-colors duration-200 flex-shrink-0
