@@ -15,6 +15,7 @@ import StickyNav from '@/components/StickyNav'
 import ParticleBackground from '@/components/ParticleBackground'
 import ScrollToTop from '@/components/ScrollToTop'
 import LightSourceTypes from '@/components/LightSourceTypes'
+import SectionHeading from '@/components/SectionHeading'
 
 const keyPoints = [
   {
@@ -226,15 +227,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <Thermometer className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Шкала CRI</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Используйте ползунки, чтобы увидеть, как CRI и цветовая температура влияют на восприятие
-          </p>
+          <SectionHeading
+            id="cri"
+            icon={Thermometer}
+            title="Шкала CRI"
+            description="Используйте ползунки, чтобы увидеть, как CRI и цветовая температура влияют на восприятие"
+          />
           <CRIGauge
             value={criValue}
             onValueChange={setCriValue}
@@ -259,15 +257,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <Lightbulb className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Где важен высокий CRI</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Помещения и ситуации, где качество цветопередачи имеет критическое значение
-          </p>
+          <SectionHeading
+            id="application"
+            icon={Lightbulb}
+            title="Где важен высокий CRI"
+            description="Помещения и ситуации, где качество цветопередачи имеет критическое значение"
+          />
           <CRICards />
         </motion.div>
       </section>
@@ -282,15 +277,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <Cpu className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Типы источников света</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Сравнение основных типов ламп по CRI и цветовой температуре
-          </p>
+          <SectionHeading
+            id="sources"
+            icon={Cpu}
+            title="Типы источников света"
+            description="Сравнение основных типов ламп по CRI и цветовой температуре"
+          />
           <LightSourceTypes />
         </motion.div>
       </section>
@@ -305,18 +297,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <Sun className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Цветовая температура</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-2 ml-11">
-            Цветовая температура измеряется в кельвинах (К)
-          </p>
-          <p className="text-gray-500 text-xs mb-8 ml-11">
-            Цветовая температура — показатель цветового тона белого света
-          </p>
+          <SectionHeading
+            id="temperature"
+            icon={Sun}
+            title="Цветовая температура"
+            description="Цветовая температура измеряется в кельвинах (К) — показатель цветового тона белого света"
+          />
 
           <ColorTemperatureDial />
 
@@ -343,15 +329,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <BookOpen className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Диапазоны цветовой температуры</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Основные диапазоны и их применение
-          </p>
+          <SectionHeading
+            id="ranges"
+            icon={BookOpen}
+            title="Диапазоны цветовой температуры"
+            description="Основные диапазоны и их применение"
+          />
           <TemperatureTable />
         </motion.div>
       </section>
@@ -366,15 +349,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <Eye className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Восприятие цветов при разном освещении</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Как цветовая температура источника света влияет на восприятие цветовых оттенков
-          </p>
+          <SectionHeading
+            id="colors"
+            icon={Eye}
+            title="Восприятие цветов при разном освещении"
+            description="Как цветовая температура источника света влияет на восприятие цветовых оттенков"
+          />
           <ColorGrid />
         </motion.div>
       </section>
@@ -389,15 +369,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <GitCompare className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Сравнение источников света</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Настройте параметры двух источников и сравните цветопередачу
-          </p>
+          <SectionHeading
+            id="comparison"
+            icon={GitCompare}
+            title="Сравнение источников света"
+            description="Настройте параметры двух источников и сравните цветопередачу"
+          />
           <LightComparison />
         </motion.div>
       </section>
@@ -412,15 +389,12 @@ export default function Home() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="h-8 w-8 rounded-lg bg-[#e8751a]/15 flex items-center justify-center">
-              <HelpCircle className="h-4 w-4 text-[#e8751a]" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold">Проверьте свои знания</h2>
-          </div>
-          <p className="text-gray-400 text-sm mb-8 ml-11">
-            Ответьте на 5 вопросов о CRI и цветовой температуре
-          </p>
+          <SectionHeading
+            id="quiz"
+            icon={HelpCircle}
+            title="Проверьте свои знания"
+            description="Ответьте на 5 вопросов о CRI и цветовой температуре"
+          />
           <CRIQuiz />
         </motion.div>
       </section>
